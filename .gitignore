@@ -1,3 +1,5 @@
 *.csv
 Task4/docs
 *.db
+*.db-journal
+**/__pycache__
