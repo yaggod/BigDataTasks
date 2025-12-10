@@ -61,6 +61,7 @@ class References(BaseModel):
 class WordsReferences(BaseModel):
     referenced_word = peewee.ForeignKeyField(Words, backref='referenced_word')
     page_url = peewee.ForeignKeyField(Urls, backref='page_url')
+    count = peewee.IntegerField(primary_key = False, default = 0)
 
     class Meta:
         constraints = [peewee.SQL('UNIQUE (referenced_word_id, page_url_id)')]
