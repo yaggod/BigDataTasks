@@ -39,10 +39,20 @@ class Urls(BaseModel):
                    .select()
                    .where(References.reference_from == self))
     
+    def get_all_indexed_outgoing_links(self) -> Iterator['Urls']:
+        return filter(lambda item : item.is_indexed , map(lambda item : item.reference_to, References
+                   .select()
+                   .where(References.reference_from == self)))
+    
     def get_all_incoming_links(self) -> Iterator['Urls']:
                 return map(lambda item : item.reference_to, References
                    .select()
                    .where(References.reference_to == self)) 
+
+    def get_all_indexed_incoming_links(self) -> Iterator['Urls']:
+                return filter(lambda item : item.is_indexed, map(lambda item : item.reference_to, References
+                   .select()
+                   .where(References.reference_to == self)))
 
 class References(BaseModel):
     reference_from = peewee.ForeignKeyField(Urls, backref='reference_from')
