@@ -1,4 +1,5 @@
 import peewee 
+from typing import Iterator
 
 
 db = peewee.SqliteDatabase('index_file.db')
@@ -26,6 +27,22 @@ class Urls(BaseModel):
     id = peewee.IntegerField(primary_key=True)
     url = peewee.CharField(unique=True)
     is_indexed = peewee.BooleanField(default=False)
+
+    def get_all_indexed_pages() -> Iterator['Urls']:
+        return Urls.select().where(Urls.is_indexed == True)
+    
+    def get_all_pages() -> Iterator['Urls']:
+        return Urls.select()
+
+    def get_all_outgoing_links(self) -> Iterator['Urls']:
+        return map(lambda item : item.reference_to, References
+                   .select()
+                   .where(References.reference_from == self))
+    
+    def get_all_incoming_links(self) -> Iterator['Urls']:
+                return map(lambda item : item.reference_to, References
+                   .select()
+                   .where(References.reference_to == self)) 
 
 class References(BaseModel):
     reference_from = peewee.ForeignKeyField(Urls, backref='reference_from')
